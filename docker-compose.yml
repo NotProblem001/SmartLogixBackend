@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Base de Datos PostgreSQL
+  # En desarrollo usamos un único servidor con 3 bases de datos lógicas aisladas
+  # Esto cumple con el Database-per-service (RNF-E01) sin sobrecargar tu RAM local.
+  postgres:
+    image: postgres:15-alpine
+    container_name: smartlogix-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+    volumes:
+      # Montamos el script SQL para que cree las 3 bases de datos al iniciar por primera vez
+      - ./init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
+      # Volumen para que los datos persistan si apagas el contenedor
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # (Opcional a futuro) Aquí agregaremos RabbitMQ/Kafka si SmartLogix requiere mensajería asíncrona
+  # y los contenedores de los microservicios una vez estén listos para Dockerizarse.
+
+volumes:
+  postgres_data:

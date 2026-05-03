@@ -1,0 +1,52 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: bff-gateway
+  # RF-B02: Seguridad OAuth2/JWT (Resource Server configurado para validar Tokens)
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "https://tudominio.auth0.com/" # Reemplazar con el Identity Provider real (Auth0, Keycloak, etc.)
+  cloud:
+    gateway:
+      # RF-B01: Enrutamiento Centralizado
+      routes:
+        - id: ms-inventario
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/inventory/**
+        - id: ms-pedidos
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/orders/**
+        - id: ms-envios
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/shipping/**
+          filters:
+            # RF-B03: Circuit Breaker aplicado a la ruta de envíos
+            - name: CircuitBreaker
+              args:
+                name: shippingCircuitBreaker
+                fallbackUri: forward:/fallback/shipping
+
+# Configuración del Circuit Breaker (Resilience4j)
+resilience4j.circuitbreaker:
+  instances:
+    shippingCircuitBreaker:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowType: COUNT_BASED
+      minimumNumberOfCalls: 5
+      waitDurationInOpenState: 50s
+      failureRateThreshold: 50
+
+# RNF-O01: Observabilidad
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus

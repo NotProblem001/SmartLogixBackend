@@ -1,0 +1,17 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: ms-envios
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smartlogix_shipping
+    username: postgres
+    password: postgres_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
