@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 @Repository
 public interface ProductInventoryRepository extends JpaRepository<ProductInventory, Long> {
-    
+
     // RNF-R02: Optimización de consulta rápida por SKU y Bodega
     Optional<ProductInventory> findByProductSkuAndWarehouseId(String productSku, Long warehouseId);
 

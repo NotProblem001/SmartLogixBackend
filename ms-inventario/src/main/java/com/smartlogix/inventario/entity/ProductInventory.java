@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "product_inventory", indexes = {
-    @Index(name = "idx_product_sku", columnList = "product_sku")
+        @Index(name = "idx_product_sku", columnList = "product_sku")
 })
 public class ProductInventory {
 
@@ -39,30 +39,62 @@ public class ProductInventory {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public ProductInventory() {}
+    public ProductInventory() {
+    }
 
-    public ProductInventory(String productSku, Integer availableQuantity, Integer reservedQuantity, Warehouse warehouse) {
+    public ProductInventory(String productSku, Integer availableQuantity, Integer reservedQuantity,
+            Warehouse warehouse) {
         this.productSku = productSku;
         this.availableQuantity = availableQuantity;
         this.reservedQuantity = reservedQuantity;
         this.warehouse = warehouse;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public String getProductSku() { return productSku; }
-    public void setProductSku(String productSku) { this.productSku = productSku; }
-    
-    public Integer getAvailableQuantity() { return availableQuantity; }
-    public void setAvailableQuantity(Integer availableQuantity) { this.availableQuantity = availableQuantity; }
-    
-    public Integer getReservedQuantity() { return reservedQuantity; }
-    public void setReservedQuantity(Integer reservedQuantity) { this.reservedQuantity = reservedQuantity; }
-    
-    public Warehouse getWarehouse() { return warehouse; }
-    public void setWarehouse(Warehouse warehouse) { this.warehouse = warehouse; }
-    
-    public LocalDateTime getLastUpdated() { return lastUpdated; }
-    public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getProductSku() {
+        return productSku;
+    }
+
+    public void setProductSku(String productSku) {
+        this.productSku = productSku;
+    }
+
+    public Integer getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(Integer availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    public Integer getReservedQuantity() {
+        return reservedQuantity;
+    }
+
+    public void setReservedQuantity(Integer reservedQuantity) {
+        this.reservedQuantity = reservedQuantity;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

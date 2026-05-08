@@ -18,7 +18,6 @@ services:
       # Volumen para que los datos persistan si apagas el contenedor
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-
   # (Opcional a futuro) Aquí agregaremos RabbitMQ/Kafka si SmartLogix requiere mensajería asíncrona
   # y los contenedores de los microservicios una vez estén listos para Dockerizarse.
 

@@ -25,6 +25,15 @@ public class Order {
     @Column(nullable = false)
     private String status; // PENDING, APPROVED, SHIPPED, DELIVERED
 
+    @Column(nullable = false)
+    private String sku;
+
+    @Column(nullable = false)
+    private Long warehouseId;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -43,6 +52,15 @@ public class Order {
     
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
+
+    public Long getWarehouseId() { return warehouseId; }
+    public void setWarehouseId(Long warehouseId) { this.warehouseId = warehouseId; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
