@@ -62,7 +62,7 @@ Aquí tienes el contenido para tu `README.md`:
 
 ---
 
-# 🚀 Microservicio Backend: [Nombre del Proyecto]
+# 🚀 Microservicio Backend: SmartLogix
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
 ![Java](https://img.shields.io/badge/Java-21-orange)
