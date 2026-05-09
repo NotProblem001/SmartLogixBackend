@@ -9,7 +9,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "https://tudominio.auth0.com/" # Reemplazar con el Identity Provider real (Auth0, Keycloak, etc.)
+          issuer-uri: "https://dev-smartlogix.us.auth0.com/" # URL del Identity Provider (Auth0)
   cloud:
     gateway:
       # RF-B01: Enrutamiento Centralizado
