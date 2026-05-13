@@ -33,4 +33,27 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
+
+    public Iterable<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    @Transactional
+    public Order updateOrder(Long id, Order updatedData) {
+        Order existing = orderRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + id));
+        
+        if (updatedData.getStatus() != null) {
+            existing.setStatus(updatedData.getStatus());
+        }
+        if (updatedData.getQuantity() != null) {
+            existing.setQuantity(updatedData.getQuantity());
+        }
+        return orderRepository.save(existing);
+    }
+
+    @Transactional
+    public void deleteOrder(Long id) {
+        orderRepository.deleteById(id);
+    }
 }

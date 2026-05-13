@@ -1,0 +1,6 @@
+com\smartlogix\envios\factory\CarrierService.class
+com\smartlogix\envios\controller\WebhookController.class
+com\smartlogix\envios\EnviosApplication.class
+com\smartlogix\envios\factory\LocalPostCarrierService.class
+com\smartlogix\envios\factory\CarrierFactory.class
+com\smartlogix\envios\factory\DhlCarrierService.class

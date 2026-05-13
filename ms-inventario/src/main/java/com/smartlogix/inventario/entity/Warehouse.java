@@ -21,6 +21,7 @@ public class Warehouse {
     @Column(nullable = false)
     private String location;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductInventory> products;
 
