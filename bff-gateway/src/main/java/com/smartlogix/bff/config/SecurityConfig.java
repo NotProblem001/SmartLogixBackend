@@ -18,7 +18,7 @@ public class SecurityConfig {
         http
             .csrf(ServerHttpSecurity.CsrfSpec::disable) // Deshabilitado para APIs REST/Microservicios
             .authorizeExchange(exchanges -> exchanges
-                .pathMatchers("/actuator/**", "/fallback/**").permitAll() // Exponer healthchecks y fallbacks
+                .pathMatchers("/actuator/**", "/fallback/**", "/api/**").permitAll() // Exponer APIs locales temporalmente
                 .anyExchange().authenticated() // RNF-S01: Rechazar todo tráfico no autenticado
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {})); // Validación del token JWT

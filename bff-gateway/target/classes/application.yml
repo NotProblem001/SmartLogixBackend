@@ -12,6 +12,20 @@ spring:
           issuer-uri: "https://dev-smartlogix.us.auth0.com/" # URL del Identity Provider (Auth0)
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:3000"
+              - "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
       # RF-B01: Enrutamiento Centralizado
       routes:
         - id: ms-inventario

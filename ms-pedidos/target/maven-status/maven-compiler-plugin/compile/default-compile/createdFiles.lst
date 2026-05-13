@@ -1,0 +1,7 @@
+com\smartlogix\pedidos\PedidosApplication.class
+com\smartlogix\pedidos\entity\Order.class
+com\smartlogix\pedidos\repository\OrderRepository.class
+com\smartlogix\pedidos\dto\OrderRequestDTO.class
+com\smartlogix\pedidos\service\OrderService.class
+com\smartlogix\pedidos\client\InventoryClient.class
+com\smartlogix\pedidos\controller\OrderController.class

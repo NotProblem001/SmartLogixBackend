@@ -31,4 +31,13 @@ public class InventoryService {
         inventory.setAvailableQuantity(newQuantity);
         repository.save(inventory); // Hibernate actualiza el timestamp automáticamente (@PreUpdate)
     }
+
+    public Iterable<ProductInventory> getAllStock() {
+        return repository.findAll();
+    }
+
+    @Transactional
+    public ProductInventory createStock(ProductInventory inventory) {
+        return repository.save(inventory);
+    }
 }

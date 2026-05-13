@@ -32,4 +32,15 @@ public class InventoryController {
         inventoryService.adjustStock(request.getSku(), request.getWarehouseId(), -request.getQuantity());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/synced-stock")
+    public ResponseEntity<Iterable<com.smartlogix.inventario.entity.ProductInventory>> getSyncedStock() {
+        return ResponseEntity.ok(inventoryService.getAllStock());
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<com.smartlogix.inventario.entity.ProductInventory> createStock(
+            @Valid @RequestBody com.smartlogix.inventario.entity.ProductInventory inventory) {
+        return ResponseEntity.ok(inventoryService.createStock(inventory));
+    }
 }
