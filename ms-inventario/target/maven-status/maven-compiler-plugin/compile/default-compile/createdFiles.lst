@@ -1,0 +1,8 @@
+com\smartlogix\inventario\dto\StockUpdateRequestDTO.class
+com\smartlogix\inventario\repository\WarehouseRepository.class
+com\smartlogix\inventario\entity\ProductInventory.class
+com\smartlogix\inventario\entity\Warehouse.class
+com\smartlogix\inventario\repository\ProductInventoryRepository.class
+com\smartlogix\inventario\controller\InventoryController.class
+com\smartlogix\inventario\service\InventoryService.class
+com\smartlogix\inventario\InventarioApplication.class

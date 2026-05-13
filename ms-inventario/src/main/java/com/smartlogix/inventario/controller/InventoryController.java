@@ -21,7 +21,7 @@ public class InventoryController {
             @PathVariable String sku,
             @PathVariable Long warehouseId,
             @RequestParam int quantityChange) {
-        
+
         inventoryService.adjustStock(sku, warehouseId, quantityChange);
         return ResponseEntity.ok("Stock actualizado exitosamente para el SKU: " + sku);
     }
@@ -31,29 +31,5 @@ public class InventoryController {
         // En adjustStock el quantityChange debe ser negativo para descontar
         inventoryService.adjustStock(request.getSku(), request.getWarehouseId(), -request.getQuantity());
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/synced-stock")
-    public ResponseEntity<Iterable<com.smartlogix.inventario.entity.ProductInventory>> getSyncedStock() {
-        return ResponseEntity.ok(inventoryService.getAllStock());
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<com.smartlogix.inventario.entity.ProductInventory> createStock(
-            @Valid @RequestBody com.smartlogix.inventario.entity.ProductInventory inventory) {
-        return ResponseEntity.ok(inventoryService.createStock(inventory));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<com.smartlogix.inventario.entity.ProductInventory> updateStock(
-            @PathVariable Long id, 
-            @RequestBody com.smartlogix.inventario.entity.ProductInventory inventory) {
-        return ResponseEntity.ok(inventoryService.updateStock(id, inventory));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStock(@PathVariable Long id) {
-        inventoryService.deleteStock(id);
-        return ResponseEntity.noContent().build();
     }
 }
