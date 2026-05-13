@@ -11,5 +11,5 @@ import java.util.Optional;
  */
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
-    Optional<Warehouse> findByName(String name);
+    Optional<Warehouse> findFirstByName(String name);
 }
