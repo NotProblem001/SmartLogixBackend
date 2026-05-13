@@ -28,8 +28,30 @@ public class InventoryController {
 
     @PostMapping("/deduct")
     public ResponseEntity<Void> deductStock(@Valid @RequestBody StockUpdateRequestDTO request) {
-        // En adjustStock el quantityChange debe ser negativo para descontar
         inventoryService.adjustStock(request.getSku(), request.getWarehouseId(), -request.getQuantity());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/synced-stock")
+    public ResponseEntity<Iterable<com.smartlogix.inventario.entity.ProductInventory>> getAllStock() {
+        return ResponseEntity.ok(inventoryService.getAllStock());
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<com.smartlogix.inventario.entity.ProductInventory> createStock(
+            @Valid @RequestBody com.smartlogix.inventario.entity.ProductInventory inventory) {
+        return ResponseEntity.ok(inventoryService.createStock(inventory));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<com.smartlogix.inventario.entity.ProductInventory> updateStock(
+            @PathVariable Long id, @RequestBody com.smartlogix.inventario.entity.ProductInventory updatedData) {
+        return ResponseEntity.ok(inventoryService.updateStock(id, updatedData));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStock(@PathVariable Long id) {
+        inventoryService.deleteStock(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -42,8 +42,7 @@ public class InventoryService {
 
     @Transactional
     public ProductInventory createStock(ProductInventory inventory) {
-        // Asegurarse de que exista una bodega para insertar la demo
-        Warehouse warehouse = warehouseRepository.findByName("Bodega Central").orElseGet(() -> {
+        Warehouse warehouse = warehouseRepository.findFirstByName("Bodega Central").orElseGet(() -> {
             Warehouse newWarehouse = new Warehouse("Bodega Central", "Santiago");
             return warehouseRepository.save(newWarehouse);
         });

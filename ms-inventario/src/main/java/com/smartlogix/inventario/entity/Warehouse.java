@@ -3,12 +3,15 @@ package com.smartlogix.inventario.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * RF-I02: Sincronización Multibodega
  * Entidad principal para manejar las diferentes bodegas físicas.
  */
 @Entity
 @Table(name = "warehouses")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Warehouse {
 
     @Id
