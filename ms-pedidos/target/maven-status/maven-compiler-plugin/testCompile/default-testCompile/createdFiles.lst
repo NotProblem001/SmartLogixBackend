@@ -1,1 +1,2 @@
-com/smartlogix/pedidos/controller/OrderControllerTest.class
+com\smartlogix\pedidos\service\OrderServiceTest.class
+com\smartlogix\pedidos\controller\OrderControllerTest.class

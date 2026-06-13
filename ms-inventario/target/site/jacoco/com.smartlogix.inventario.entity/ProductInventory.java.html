@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductInventory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-inventario</a> &gt; <a href="index.source.html" class="el_package">com.smartlogix.inventario.entity</a> &gt; <span class="el_source">ProductInventory.java</span></div><h1>ProductInventory.java</h1><pre class="source lang-java linenums">package com.smartlogix.inventario.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+/**
+ * RF-I01: Gestión de Stock transaccional
+ * Mapeo JPA para el inventario de un producto en una bodega específica.
+ */
+@Entity
+@Table(name = &quot;product_inventory&quot;, indexes = {
+        @Index(name = &quot;idx_product_sku&quot;, columnList = &quot;product_sku&quot;)
+})
+public class ProductInventory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, name = &quot;product_sku&quot;)
+    private String productSku;
+
+    @Column(nullable = false, name = &quot;available_quantity&quot;)
+    private Integer availableQuantity;
+
+    @Column(nullable = false, name = &quot;reserved_quantity&quot;)
+    private Integer reservedQuantity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;warehouse_id&quot;, nullable = false)
+    private Warehouse warehouse;
+
+    @Column(name = &quot;last_updated&quot;, nullable = false)
+    private LocalDateTime lastUpdated;
+
+    @PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+<span class="nc" id="L39">        this.lastUpdated = LocalDateTime.now();</span>
+<span class="nc" id="L40">    }</span>
+
+<span class="fc" id="L42">    public ProductInventory() {</span>
+<span class="fc" id="L43">    }</span>
+
+    public ProductInventory(String productSku, Integer availableQuantity, Integer reservedQuantity,
+<span class="nc" id="L46">            Warehouse warehouse) {</span>
+<span class="nc" id="L47">        this.productSku = productSku;</span>
+<span class="nc" id="L48">        this.availableQuantity = availableQuantity;</span>
+<span class="nc" id="L49">        this.reservedQuantity = reservedQuantity;</span>
+<span class="nc" id="L50">        this.warehouse = warehouse;</span>
+<span class="nc" id="L51">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L54">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L58">        this.id = id;</span>
+<span class="fc" id="L59">    }</span>
+
+    public String getProductSku() {
+<span class="nc" id="L62">        return productSku;</span>
+    }
+
+    public void setProductSku(String productSku) {
+<span class="fc" id="L66">        this.productSku = productSku;</span>
+<span class="fc" id="L67">    }</span>
+
+    public Integer getAvailableQuantity() {
+<span class="fc" id="L70">        return availableQuantity;</span>
+    }
+
+    public void setAvailableQuantity(Integer availableQuantity) {
+<span class="fc" id="L74">        this.availableQuantity = availableQuantity;</span>
+<span class="fc" id="L75">    }</span>
+
+    public Integer getReservedQuantity() {
+<span class="fc" id="L78">        return reservedQuantity;</span>
+    }
+
+    public void setReservedQuantity(Integer reservedQuantity) {
+<span class="fc" id="L82">        this.reservedQuantity = reservedQuantity;</span>
+<span class="fc" id="L83">    }</span>
+
+    public Warehouse getWarehouse() {
+<span class="fc" id="L86">        return warehouse;</span>
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+<span class="fc" id="L90">        this.warehouse = warehouse;</span>
+<span class="fc" id="L91">    }</span>
+
+    public LocalDateTime getLastUpdated() {
+<span class="nc" id="L94">        return lastUpdated;</span>
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+<span class="nc" id="L98">        this.lastUpdated = lastUpdated;</span>
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,4 +1,5 @@
 com\smartlogix\inventario\dto\StockUpdateRequestDTO.class
+com\smartlogix\inventario\exception\GlobalExceptionHandler.class
 com\smartlogix\inventario\repository\WarehouseRepository.class
 com\smartlogix\inventario\entity\ProductInventory.class
 com\smartlogix\inventario\entity\Warehouse.class

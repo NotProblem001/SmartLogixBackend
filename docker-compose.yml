@@ -2,8 +2,6 @@ version: '3.8'
 
 services:
   # Base de Datos PostgreSQL
-  # En desarrollo usamos un único servidor con 3 bases de datos lógicas aisladas
-  # Esto cumple con el Database-per-service (RNF-E01) sin sobrecargar tu RAM local.
   postgres:
     image: postgres:15-alpine
     container_name: smartlogix-postgres
@@ -13,13 +11,110 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_password
     volumes:
-      # Montamos el script SQL para que cree las 3 bases de datos al iniciar por primera vez
       - ./init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
-      # Volumen para que los datos persistan si apagas el contenedor
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - smartlogix-network
     restart: unless-stopped
-  # (Opcional a futuro) Aquí agregaremos RabbitMQ/Kafka si SmartLogix requiere mensajería asíncrona
-  # y los contenedores de los microservicios una vez estén listos para Dockerizarse.
+
+  # Microservicio de Inventario
+  ms-inventario:
+    build:
+      context: .
+      dockerfile: ms-inventario/Dockerfile
+    container_name: smartlogix-ms-inventario
+    ports:
+      - "8086:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartlogix_inventory
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - postgres
+    networks:
+      - smartlogix-network
+    restart: unless-stopped
+
+  # Microservicio de Pedidos
+  ms-pedidos:
+    build:
+      context: .
+      dockerfile: ms-pedidos/Dockerfile
+    container_name: smartlogix-ms-pedidos
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartlogix_orders
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+      INVENTORY_URL: http://ms-inventario:8081
+    depends_on:
+      - postgres
+      - ms-inventario
+    networks:
+      - smartlogix-network
+    restart: unless-stopped
+
+  # Microservicio de Envíos
+  ms-envios:
+    build:
+      context: .
+      dockerfile: ms-envios/Dockerfile
+    container_name: smartlogix-ms-envios
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartlogix_shipping
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - postgres
+    networks:
+      - smartlogix-network
+    restart: unless-stopped
+
+  # Backend For Frontend - API Gateway
+  bff-gateway:
+    build:
+      context: .
+      dockerfile: bff-gateway/Dockerfile
+    container_name: smartlogix-bff-gateway
+    ports:
+      - "8085:8080"
+    environment:
+      MS_INVENTARIO_URI: http://ms-inventario:8081
+      MS_PEDIDOS_URI: http://ms-pedidos:8082
+      MS_ENVIOS_URI: http://ms-envios:8083
+      JWT_SECRET: "defaultsecretkeyplaceholderformicros32chars"
+    depends_on:
+      - ms-inventario
+      - ms-pedidos
+      - ms-envios
+    networks:
+      - smartlogix-network
+    restart: unless-stopped
+
+  # Frontend React/Vite
+  frontend:
+    build:
+      context: ../SmartLogixFrontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:8085/api/v1
+    container_name: smartlogix-frontend
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:8085/api/v1
+    depends_on:
+      - bff-gateway
+    networks:
+      - smartlogix-network
+    restart: unless-stopped
+
+networks:
+  smartlogix-network:
+    driver: bridge
 
 volumes:
   postgres_data:

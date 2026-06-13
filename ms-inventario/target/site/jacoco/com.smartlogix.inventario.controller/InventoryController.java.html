@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-inventario</a> &gt; <a href="index.source.html" class="el_package">com.smartlogix.inventario.controller</a> &gt; <span class="el_source">InventoryController.java</span></div><h1>InventoryController.java</h1><pre class="source lang-java linenums">package com.smartlogix.inventario.controller;
+
+import com.smartlogix.inventario.service.InventoryService;
+import com.smartlogix.inventario.dto.StockUpdateRequestDTO;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(&quot;/api/v1/inventory&quot;)
+public class InventoryController {
+
+    private final InventoryService inventoryService;
+
+<span class="fc" id="L15">    public InventoryController(InventoryService inventoryService) {</span>
+<span class="fc" id="L16">        this.inventoryService = inventoryService;</span>
+<span class="fc" id="L17">    }</span>
+
+    @PostMapping(&quot;/{sku}/warehouse/{warehouseId}/adjust&quot;)
+    public ResponseEntity&lt;String&gt; adjustStock(
+            @PathVariable String sku,
+            @PathVariable Long warehouseId,
+            @RequestParam int quantityChange) {
+
+<span class="nc" id="L25">        inventoryService.adjustStock(sku, warehouseId, quantityChange);</span>
+<span class="nc" id="L26">        return ResponseEntity.ok(&quot;Stock actualizado exitosamente para el SKU: &quot; + sku);</span>
+    }
+
+    @PostMapping(&quot;/deduct&quot;)
+    public ResponseEntity&lt;Void&gt; deductStock(@Valid @RequestBody StockUpdateRequestDTO request) {
+<span class="fc" id="L31">        inventoryService.adjustStock(request.getSku(), request.getWarehouseId(), -request.getQuantity());</span>
+<span class="fc" id="L32">        return ResponseEntity.ok().build();</span>
+    }
+
+    @GetMapping(&quot;/synced-stock&quot;)
+    public ResponseEntity&lt;Iterable&lt;com.smartlogix.inventario.entity.ProductInventory&gt;&gt; getAllStock() {
+<span class="nc" id="L37">        return ResponseEntity.ok(inventoryService.getAllStock());</span>
+    }
+
+    @PostMapping(&quot;/create&quot;)
+    public ResponseEntity&lt;com.smartlogix.inventario.entity.ProductInventory&gt; createStock(
+            @Valid @RequestBody com.smartlogix.inventario.entity.ProductInventory inventory) {
+<span class="nc" id="L43">        return ResponseEntity.ok(inventoryService.createStock(inventory));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;com.smartlogix.inventario.entity.ProductInventory&gt; updateStock(
+            @PathVariable Long id, @RequestBody com.smartlogix.inventario.entity.ProductInventory updatedData) {
+<span class="nc" id="L49">        return ResponseEntity.ok(inventoryService.updateStock(id, updatedData));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteStock(@PathVariable Long id) {
+<span class="nc" id="L54">        inventoryService.deleteStock(id);</span>
+<span class="nc" id="L55">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

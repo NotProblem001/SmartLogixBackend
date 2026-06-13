@@ -1,0 +1,6 @@
+com\smartlogix\bff\config\JwtDecoderConfig.class
+com\smartlogix\bff\config\SecurityConfig.class
+com\smartlogix\bff\filter\JwtValidationFilter.class
+com\smartlogix\bff\BffGatewayApplication.class
+com\smartlogix\bff\filter\JwtValidationFilter$Config.class
+com\smartlogix\bff\controller\FallbackController.class
