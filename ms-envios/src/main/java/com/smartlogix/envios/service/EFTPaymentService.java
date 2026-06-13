@@ -2,22 +2,24 @@ package com.smartlogix.envios.service;
 
 import com.smartlogix.envios.client.BankGatewayClient;
 import com.smartlogix.envios.entity.Invoice;
+import com.smartlogix.envios.entity.ProcessedInvoice;
 import com.smartlogix.envios.exception.InvalidAccountException;
 import com.smartlogix.envios.exception.PaymentDeclinedException;
+import com.smartlogix.envios.repository.ProcessedInvoiceRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class EFTPaymentService {
 
     private final BankGatewayClient bankGatewayClient;
-    private final Set<String> processedInvoiceIds = new HashSet<>();
+    private final ProcessedInvoiceRepository processedInvoiceRepository;
 
-    public EFTPaymentService(BankGatewayClient bankGatewayClient) {
+    public EFTPaymentService(BankGatewayClient bankGatewayClient, ProcessedInvoiceRepository processedInvoiceRepository) {
         this.bankGatewayClient = bankGatewayClient;
+        this.processedInvoiceRepository = processedInvoiceRepository;
     }
 
     public void processPayment(Invoice invoice) {
@@ -30,12 +32,10 @@ public class EFTPaymentService {
             throw new InvalidAccountException("Cuenta EFT no puede ser nula o vacía");
         }
 
-        // 2. Idempotency Check (Double debit protection)
-        synchronized (processedInvoiceIds) {
-            if (processedInvoiceIds.contains(invoice.getId())) {
-                invoice.setStatus("PAID");
-                return;
-            }
+        // 2. Idempotency Check (Double debit protection via Database)
+        if (processedInvoiceRepository.existsById(invoice.getId())) {
+            invoice.setStatus("PAID");
+            return;
         }
 
         // 3. Retry block for bank communication failures (up to 3 attempts)
@@ -68,8 +68,6 @@ public class EFTPaymentService {
 
         // 5. Finalize payment status
         invoice.setStatus("PAID");
-        synchronized (processedInvoiceIds) {
-            processedInvoiceIds.add(invoice.getId());
-        }
+        processedInvoiceRepository.save(new ProcessedInvoice(invoice.getId(), LocalDateTime.now()));
     }
 }

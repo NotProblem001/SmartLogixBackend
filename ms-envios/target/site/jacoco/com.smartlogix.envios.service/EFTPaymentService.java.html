@@ -2,41 +2,41 @@
 
 import com.smartlogix.envios.client.BankGatewayClient;
 import com.smartlogix.envios.entity.Invoice;
+import com.smartlogix.envios.entity.ProcessedInvoice;
 import com.smartlogix.envios.exception.InvalidAccountException;
 import com.smartlogix.envios.exception.PaymentDeclinedException;
+import com.smartlogix.envios.repository.ProcessedInvoiceRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class EFTPaymentService {
 
     private final BankGatewayClient bankGatewayClient;
-<span class="fc" id="L17">    private final Set&lt;String&gt; processedInvoiceIds = new HashSet&lt;&gt;();</span>
+    private final ProcessedInvoiceRepository processedInvoiceRepository;
 
-<span class="fc" id="L19">    public EFTPaymentService(BankGatewayClient bankGatewayClient) {</span>
-<span class="fc" id="L20">        this.bankGatewayClient = bankGatewayClient;</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L20">    public EFTPaymentService(BankGatewayClient bankGatewayClient, ProcessedInvoiceRepository processedInvoiceRepository) {</span>
+<span class="fc" id="L21">        this.bankGatewayClient = bankGatewayClient;</span>
+<span class="fc" id="L22">        this.processedInvoiceRepository = processedInvoiceRepository;</span>
+<span class="fc" id="L23">    }</span>
 
     public void processPayment(Invoice invoice) {
-<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (invoice == null) {</span>
-<span class="nc" id="L25">            throw new IllegalArgumentException(&quot;La factura no puede ser nula&quot;);</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (invoice == null) {</span>
+<span class="nc" id="L27">            throw new IllegalArgumentException(&quot;La factura no puede ser nula&quot;);</span>
         }
 
         // 1. Validation check
-<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (invoice.getAccountId() == null || invoice.getAccountId().trim().isEmpty()) {</span>
-<span class="fc" id="L30">            throw new InvalidAccountException(&quot;Cuenta EFT no puede ser nula o vacía&quot;);</span>
+<span class="fc bfc" id="L31" title="All 4 branches covered.">        if (invoice.getAccountId() == null || invoice.getAccountId().trim().isEmpty()) {</span>
+<span class="fc" id="L32">            throw new InvalidAccountException(&quot;Cuenta EFT no puede ser nula o vacía&quot;);</span>
         }
 
-        // 2. Idempotency Check (Double debit protection)
-<span class="fc" id="L34">        synchronized (processedInvoiceIds) {</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (processedInvoiceIds.contains(invoice.getId())) {</span>
-<span class="fc" id="L36">                invoice.setStatus(&quot;PAID&quot;);</span>
-<span class="fc" id="L37">                return;</span>
-            }
-<span class="fc" id="L39">        }</span>
+        // 2. Idempotency Check (Double debit protection via Database)
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (processedInvoiceRepository.existsById(invoice.getId())) {</span>
+<span class="fc" id="L37">            invoice.setStatus(&quot;PAID&quot;);</span>
+<span class="fc" id="L38">            return;</span>
+        }
 
         // 3. Retry block for bank communication failures (up to 3 attempts)
 <span class="fc" id="L42">        int maxRetries = 3;</span>
@@ -68,9 +68,7 @@ public class EFTPaymentService {
 
         // 5. Finalize payment status
 <span class="fc" id="L70">        invoice.setStatus(&quot;PAID&quot;);</span>
-<span class="fc" id="L71">        synchronized (processedInvoiceIds) {</span>
-<span class="fc" id="L72">            processedInvoiceIds.add(invoice.getId());</span>
-<span class="fc" id="L73">        }</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L71">        processedInvoiceRepository.save(new ProcessedInvoice(invoice.getId(), LocalDateTime.now()));</span>
+<span class="fc" id="L72">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

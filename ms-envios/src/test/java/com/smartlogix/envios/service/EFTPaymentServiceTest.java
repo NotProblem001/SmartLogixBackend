@@ -4,6 +4,7 @@ import com.smartlogix.envios.client.BankGatewayClient;
 import com.smartlogix.envios.entity.Invoice;
 import com.smartlogix.envios.exception.InvalidAccountException;
 import com.smartlogix.envios.exception.PaymentDeclinedException;
+import com.smartlogix.envios.repository.ProcessedInvoiceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ public class EFTPaymentServiceTest {
     @Mock
     private BankGatewayClient bankGatewayClient;
 
+    @Mock
+    private ProcessedInvoiceRepository processedInvoiceRepository;
+
     @InjectMocks
     private EFTPaymentService eftPaymentService;
 
@@ -38,6 +42,7 @@ public class EFTPaymentServiceTest {
 
     @Test
     public void testEFTDebit_SuccessfulExecution_UpdatesLedger() {
+        Mockito.when(processedInvoiceRepository.existsById("INV-001")).thenReturn(false);
         Mockito.when(bankGatewayClient.processDebit("ACCT-12345", 500.0))
                 .thenReturn(Map.of("status", "SUCCESS", "receipt", "REC-999"));
 
@@ -45,10 +50,12 @@ public class EFTPaymentServiceTest {
 
         assertEquals("PAID", invoice.getStatus());
         verify(bankGatewayClient, times(1)).processDebit("ACCT-12345", 500.0);
+        verify(processedInvoiceRepository, times(1)).save(Mockito.any());
     }
 
     @Test
     public void testEFTDebit_InsufficientFunds_TriggersExceptionAndAlert() {
+        Mockito.when(processedInvoiceRepository.existsById("INV-001")).thenReturn(false);
         Mockito.when(bankGatewayClient.processDebit("ACCT-12345", 500.0))
                 .thenReturn(Map.of("status", "DECLINED", "reason", "INSUFFICIENT_FUNDS"));
 
@@ -62,6 +69,10 @@ public class EFTPaymentServiceTest {
 
     @Test
     public void testIdempotency_DoubleDebit() {
+        Mockito.when(processedInvoiceRepository.existsById("INV-001"))
+                .thenReturn(false)
+                .thenReturn(true);
+
         Mockito.when(bankGatewayClient.processDebit("ACCT-12345", 500.0))
                 .thenReturn(Map.of("status", "SUCCESS"));
 
@@ -94,6 +105,7 @@ public class EFTPaymentServiceTest {
 
     @Test
     public void testRetry_BankTimeout() {
+        Mockito.when(processedInvoiceRepository.existsById("INV-001")).thenReturn(false);
         Mockito.when(bankGatewayClient.processDebit(anyString(), anyDouble()))
                 .thenThrow(new RuntimeException("SocketTimeoutException: Connection timed out"));
 

@@ -44,8 +44,9 @@ import java.util.stream.Collectors;
 <span class="fc" id="L44">        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)</span>
 <span class="fc" id="L45">                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))</span>
 <span class="fc" id="L46">                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);</span>
-<span class="fc" id="L47">        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));</span>
-<span class="fc" id="L48">        return EARTH_RADIUS_KM * c;</span>
+<span class="fc" id="L47">        a = Math.max(0.0, Math.min(1.0, a));</span>
+<span class="fc" id="L48">        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));</span>
+<span class="fc" id="L49">        return EARTH_RADIUS_KM * c;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
