@@ -1,8 +1,8 @@
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/dto/StockUpdateRequestDTO.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/InventarioApplication.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/repository/WarehouseRepository.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/service/InventoryService.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/entity/ProductInventory.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/controller/InventoryController.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/entity/Warehouse.java
-/usr/src/app/ms-inventario/src/main/java/com/smartlogix/inventario/repository/ProductInventoryRepository.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\dto\StockUpdateRequestDTO.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\repository\ProductInventoryRepository.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\entity\ProductInventory.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\service\InventoryService.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\InventarioApplication.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\controller\InventoryController.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\entity\Warehouse.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\repository\WarehouseRepository.java

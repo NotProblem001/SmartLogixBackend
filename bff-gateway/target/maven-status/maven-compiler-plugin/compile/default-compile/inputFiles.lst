@@ -1,3 +1,5 @@
-/usr/src/app/bff-gateway/src/main/java/com/smartlogix/bff/BffGatewayApplication.java
-/usr/src/app/bff-gateway/src/main/java/com/smartlogix/bff/config/SecurityConfig.java
-/usr/src/app/bff-gateway/src/main/java/com/smartlogix/bff/controller/FallbackController.java
+C:\SL\SmartLogixBackend\bff-gateway\src\main\java\com\smartlogix\bff\config\SecurityConfig.java
+C:\SL\SmartLogixBackend\bff-gateway\src\main\java\com\smartlogix\bff\filter\JwtValidationFilter.java
+C:\SL\SmartLogixBackend\bff-gateway\src\main\java\com\smartlogix\bff\config\JwtDecoderConfig.java
+C:\SL\SmartLogixBackend\bff-gateway\src\main\java\com\smartlogix\bff\BffGatewayApplication.java
+C:\SL\SmartLogixBackend\bff-gateway\src\main\java\com\smartlogix\bff\controller\FallbackController.java

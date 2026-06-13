@@ -1,3 +1,8 @@
-C:\Workspace\SmartLogix\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\EnviosApplication.java
-C:\Workspace\SmartLogix\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\factory\CarrierFactory.java
-C:\Workspace\SmartLogix\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\controller\WebhookController.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\service\ShipmentService.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\controller\WebhookController.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\factory\CarrierFactory.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\repository\ShipmentRepository.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\EnviosApplication.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\controller\ShippingController.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\factory\ShippingProvider.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\entity\Shipment.java
