@@ -1,10 +1,11 @@
 com\smartlogix\envios\controller\ShippingController.class
 com\smartlogix\envios\factory\ExpressShippingProvider.class
+com\smartlogix\envios\exception\GlobalExceptionHandler.class
 com\smartlogix\envios\entity\Shipment.class
-com\smartlogix\envios\controller\WebhookController.class
 com\smartlogix\envios\EnviosApplication.class
 com\smartlogix\envios\factory\DhlShippingProvider.class
 com\smartlogix\envios\factory\LocalShippingProvider.class
+com\smartlogix\envios\controller\WebhookController.class
 com\smartlogix\envios\repository\ShipmentRepository.class
 com\smartlogix\envios\service\ShipmentService.class
 com\smartlogix\envios\factory\CarrierFactory.class

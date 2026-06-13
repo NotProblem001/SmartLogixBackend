@@ -4,5 +4,6 @@ C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\en
 C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\service\InventoryService.java
 C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\InventarioApplication.java
 C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\controller\InventoryController.java
+C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\exception\GlobalExceptionHandler.java
 C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\entity\Warehouse.java
 C:\SL\SmartLogixBackend\ms-inventario\src\main\java\com\smartlogix\inventario\repository\WarehouseRepository.java

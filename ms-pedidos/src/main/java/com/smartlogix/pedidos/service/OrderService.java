@@ -3,6 +3,7 @@ package com.smartlogix.pedidos.service;
 import com.smartlogix.pedidos.client.InventoryClient;
 import com.smartlogix.pedidos.dto.OrderRequestDTO;
 import com.smartlogix.pedidos.entity.Order;
+import com.smartlogix.pedidos.exception.OrderCreationException;
 import com.smartlogix.pedidos.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,20 +19,33 @@ public class OrderService {
         this.inventoryClient = inventoryClient;
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = OrderCreationException.class)
     public Order createOrder(OrderRequestDTO request) {
-        // 1. Descontar stock en ms-inventario de forma sincrónica
-        inventoryClient.deductStock(request.getSku(), request.getWarehouseId(), request.getQuantity());
-
-        // 2. Si el descuento fue exitoso, creamos el pedido
+        // 1. Primero creamos el pedido en estado PENDING y lo guardamos
         Order order = new Order();
         order.setCustomerId(request.getCustomerId());
         order.setSku(request.getSku());
         order.setWarehouseId(request.getWarehouseId());
         order.setQuantity(request.getQuantity());
-        order.setStatus("APPROVED");
+        order.setStatus("PENDING");
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        if (savedOrder != null) {
+            order = savedOrder;
+        }
 
-        return orderRepository.save(order);
+        try {
+            // 2. Descontar stock en ms-inventario de forma sincrónica
+            inventoryClient.deductStock(request.getSku(), request.getWarehouseId(), request.getQuantity());
+
+            // 3. Si tiene éxito, pasamos a APPROVED
+            order.setStatus("APPROVED");
+            return orderRepository.save(order);
+        } catch (Exception e) {
+            // 4. Si falla, pasamos a REJECTED y lanzamos excepción controlada
+            order.setStatus("REJECTED");
+            orderRepository.save(order);
+            throw new OrderCreationException("No se pudo crear el pedido: " + e.getMessage(), e);
+        }
     }
 
     public Order getOrderById(Long id) {

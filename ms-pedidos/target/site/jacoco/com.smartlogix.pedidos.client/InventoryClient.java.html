@@ -14,8 +14,8 @@ public class InventoryClient {
     private final RestTemplate restTemplate;
     private final String inventoryUrl;
 
-<span class="nc" id="L17">    public InventoryClient(@Value(&quot;${inventory.url:http://localhost:8081}&quot;) String inventoryUrl) {</span>
-<span class="nc" id="L18">        this.restTemplate = new RestTemplate();</span>
+<span class="nc" id="L17">    public InventoryClient(RestTemplate restTemplate, @Value(&quot;${inventory.url:http://localhost:8081}&quot;) String inventoryUrl) {</span>
+<span class="nc" id="L18">        this.restTemplate = restTemplate;</span>
 <span class="nc" id="L19">        this.inventoryUrl = inventoryUrl;</span>
 <span class="nc" id="L20">    }</span>
 

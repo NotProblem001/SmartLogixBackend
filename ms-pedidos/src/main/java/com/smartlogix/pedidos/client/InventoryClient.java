@@ -14,8 +14,8 @@ public class InventoryClient {
     private final RestTemplate restTemplate;
     private final String inventoryUrl;
 
-    public InventoryClient(@Value("${inventory.url:http://localhost:8081}") String inventoryUrl) {
-        this.restTemplate = new RestTemplate();
+    public InventoryClient(RestTemplate restTemplate, @Value("${inventory.url:http://localhost:8081}") String inventoryUrl) {
+        this.restTemplate = restTemplate;
         this.inventoryUrl = inventoryUrl;
     }
 

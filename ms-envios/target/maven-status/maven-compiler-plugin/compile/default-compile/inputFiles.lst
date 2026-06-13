@@ -3,6 +3,7 @@ C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\controller
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\factory\CarrierFactory.java
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\repository\ShipmentRepository.java
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\EnviosApplication.java
+C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\exception\GlobalExceptionHandler.java
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\controller\ShippingController.java
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\factory\ShippingProvider.java
 C:\SL\SmartLogixBackend\ms-envios\src\main\java\com\smartlogix\envios\entity\Shipment.java

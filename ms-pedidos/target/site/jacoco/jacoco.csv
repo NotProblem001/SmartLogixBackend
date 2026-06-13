@@ -1,8 +1,11 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 ms-pedidos,com.smartlogix.pedidos.dto,OrderRequestDTO,0,31,0,0,0,9,0,9,0,9
+ms-pedidos,com.smartlogix.pedidos.exception,GlobalExceptionHandler,108,33,0,0,20,6,4,2,4,2
+ms-pedidos,com.smartlogix.pedidos.exception,OrderCreationException,9,0,0,0,4,0,2,0,2,0
 ms-pedidos,com.smartlogix.pedidos,PedidosApplication,5,3,0,0,2,1,1,1,1,1
 ms-pedidos,com.smartlogix.pedidos.controller,OrderController,25,11,0,0,5,4,4,2,4,2
-ms-pedidos,com.smartlogix.pedidos.client,InventoryClient,46,0,0,0,11,0,2,0,2,0
+ms-pedidos,com.smartlogix.pedidos.client,InventoryClient,44,0,0,0,11,0,2,0,2,0
 ms-pedidos,com.smartlogix.pedidos.config,JpaAuditingConfig,3,0,0,0,1,0,1,0,1,0
-ms-pedidos,com.smartlogix.pedidos.service,OrderService,30,116,7,9,7,26,8,7,2,5
+ms-pedidos,com.smartlogix.pedidos.config,RestTemplateConfig,18,0,0,0,5,0,2,0,2,0
+ms-pedidos,com.smartlogix.pedidos.service,OrderService,49,127,8,10,12,29,9,7,2,5
 ms-pedidos,com.smartlogix.pedidos.entity,Order,0,51,0,0,0,15,0,15,0,15

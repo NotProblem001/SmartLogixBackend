@@ -1,5 +1,8 @@
+C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\exception\OrderCreationException.java
 C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\client\InventoryClient.java
 C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\repository\OrderRepository.java
+C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\config\RestTemplateConfig.java
+C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\exception\GlobalExceptionHandler.java
 C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\service\OrderService.java
 C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\dto\OrderRequestDTO.java
 C:\SL\SmartLogixBackend\ms-pedidos\src\main\java\com\smartlogix\pedidos\entity\Order.java
