@@ -52,6 +52,12 @@ spring:
               args:
                 name: shippingCircuitBreaker
                 fallbackUri: forward:/fallback/shipping
+        - id: ms-envios-matching
+          uri: ${MS_ENVIOS_URI:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/matching/**
+          filters:
+            - name: JwtValidationFilter
 
 # Configuración del Circuit Breaker (Resilience4j)
 resilience4j.circuitbreaker:
