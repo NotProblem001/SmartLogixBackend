@@ -30,19 +30,19 @@ spring:
       # RF-B01: Enrutamiento Centralizado
       routes:
         - id: ms-inventario
-          uri: http://localhost:8081
+          uri: ${MS_INVENTARIO_URI:http://localhost:8081}
           predicates:
             - Path=/api/v1/inventory/**
           filters:
             - name: JwtValidationFilter
         - id: ms-pedidos
-          uri: http://localhost:8082
+          uri: ${MS_PEDIDOS_URI:http://localhost:8082}
           predicates:
             - Path=/api/v1/orders/**
           filters:
             - name: JwtValidationFilter
         - id: ms-envios
-          uri: http://localhost:8083
+          uri: ${MS_ENVIOS_URI:http://localhost:8083}
           predicates:
             - Path=/api/v1/shipping/**
           filters:
