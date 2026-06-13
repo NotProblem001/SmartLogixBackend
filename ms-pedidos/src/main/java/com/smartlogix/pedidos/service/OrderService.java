@@ -34,19 +34,38 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + id));
+    }
+
     public Iterable<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
     @Transactional
     public Order updateOrder(Long id, Order updatedData) {
-        Order existing = orderRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + id));
+        Order existing = getOrderById(id);
         
         if (updatedData.getStatus() != null) {
-            existing.setStatus(updatedData.getStatus());
+            String currentStatus = existing.getStatus();
+            String newStatus = updatedData.getStatus();
+            
+            // Validaciones del ciclo de vida del pedido
+            if ("DELIVERED".equals(currentStatus) && !currentStatus.equals(newStatus)) {
+                throw new IllegalStateException("No se puede modificar el estado de un pedido ya entregado.");
+            }
+            if ("CANCELLED".equals(currentStatus) && !currentStatus.equals(newStatus)) {
+                throw new IllegalStateException("No se puede modificar un pedido cancelado.");
+            }
+            
+            existing.setStatus(newStatus);
         }
         if (updatedData.getQuantity() != null) {
+            String currentStatus = existing.getStatus();
+            if ("SHIPPED".equals(currentStatus) || "DELIVERED".equals(currentStatus)) {
+                throw new IllegalStateException("No se puede cambiar la cantidad de un pedido enviado o entregado.");
+            }
             existing.setQuantity(updatedData.getQuantity());
         }
         return orderRepository.save(existing);
@@ -54,6 +73,7 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
+        Order existing = getOrderById(id);
+        orderRepository.delete(existing);
     }
 }
