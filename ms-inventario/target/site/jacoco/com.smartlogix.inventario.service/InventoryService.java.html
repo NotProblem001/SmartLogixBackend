@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-inventario</a> &gt; <a href="index.source.html" class="el_package">com.smartlogix.inventario.service</a> &gt; <span class="el_source">InventoryService.java</span></div><h1>InventoryService.java</h1><pre class="source lang-java linenums">package com.smartlogix.inventario.service;
+
+import com.smartlogix.inventario.entity.ProductInventory;
+import com.smartlogix.inventario.entity.Warehouse;
+import com.smartlogix.inventario.repository.ProductInventoryRepository;
+import com.smartlogix.inventario.repository.WarehouseRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Servicio de Inventario (RF-I01).
+ * Encapsula la lógica de negocio y transaccionalidad.
+ */
+@Service
+public class InventoryService {
+
+    private final ProductInventoryRepository repository;
+    private final WarehouseRepository warehouseRepository;
+
+<span class="fc" id="L20">    public InventoryService(ProductInventoryRepository repository, WarehouseRepository warehouseRepository) {</span>
+<span class="fc" id="L21">        this.repository = repository;</span>
+<span class="fc" id="L22">        this.warehouseRepository = warehouseRepository;</span>
+<span class="fc" id="L23">    }</span>
+
+    @Transactional
+    public void adjustStock(String sku, Long warehouseId, int quantityChange) {
+<span class="fc" id="L27">        ProductInventory inventory = repository.findByProductSkuAndWarehouseId(sku, warehouseId)</span>
+<span class="pc" id="L28">                .orElseThrow(() -&gt; new RuntimeException(&quot;Inventario no encontrado para SKU: &quot; + sku + &quot; en bodega: &quot; + warehouseId));</span>
+        
+<span class="fc" id="L30">        int newQuantity = inventory.getAvailableQuantity() + quantityChange;</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (newQuantity &lt; 0) {</span>
+<span class="fc" id="L32">            throw new RuntimeException(&quot;Stock insuficiente para procesar la orden del SKU: &quot; + sku);</span>
+        }
+        
+<span class="fc" id="L35">        inventory.setAvailableQuantity(newQuantity);</span>
+<span class="fc" id="L36">        repository.save(inventory); // Hibernate actualiza el timestamp automáticamente (@PreUpdate)</span>
+<span class="fc" id="L37">    }</span>
+
+    public Iterable&lt;ProductInventory&gt; getAllStock() {
+<span class="nc" id="L40">        return repository.findAll();</span>
+    }
+
+    @Transactional
+    public ProductInventory createStock(ProductInventory inventory) {
+<span class="fc" id="L45">        Warehouse warehouse = warehouseRepository.findFirstByName(&quot;Bodega Central&quot;).orElseGet(() -&gt; {</span>
+<span class="nc" id="L46">            Warehouse newWarehouse = new Warehouse(&quot;Bodega Central&quot;, &quot;Santiago&quot;);</span>
+<span class="nc" id="L47">            return warehouseRepository.save(newWarehouse);</span>
+        });
+        
+<span class="fc" id="L50">        inventory.setWarehouse(warehouse);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (inventory.getReservedQuantity() == null) {</span>
+<span class="nc" id="L52">            inventory.setReservedQuantity(0);</span>
+        }
+<span class="fc" id="L54">        return repository.save(inventory);</span>
+    }
+
+    @Transactional
+    public ProductInventory updateStock(Long id, ProductInventory updatedData) {
+<span class="nc" id="L59">        ProductInventory existing = repository.findById(id)</span>
+<span class="nc" id="L60">            .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado con ID: &quot; + id));</span>
+        
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (updatedData.getProductSku() != null) {</span>
+<span class="nc" id="L63">            existing.setProductSku(updatedData.getProductSku());</span>
+        }
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (updatedData.getAvailableQuantity() != null) {</span>
+<span class="nc" id="L66">            existing.setAvailableQuantity(updatedData.getAvailableQuantity());</span>
+        }
+<span class="nc" id="L68">        return repository.save(existing);</span>
+    }
+
+    @Transactional
+    public void deleteStock(Long id) {
+<span class="nc" id="L73">        repository.deleteById(id);</span>
+<span class="nc" id="L74">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
