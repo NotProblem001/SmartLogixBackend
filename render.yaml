@@ -1,0 +1,91 @@
+version: "1"
+
+# 1. Base de Datos Administrada de Render
+databases:
+  - name: smartlogix-postgres
+    databaseName: smartlogix
+    user: postgres
+    plan: free
+
+services:
+  # 2. Microservicio de Inventario (pserv = Private Service, no accesible desde fuera)
+  - type: pserv
+    name: ms-inventario
+    env: docker
+    dockerfilePath: ms-inventario/Dockerfile
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: smartlogix-postgres, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: smartlogix-postgres, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: smartlogix-postgres, property: database }
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase: { name: smartlogix-postgres, property: user }
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase: { name: smartlogix-postgres, property: password }
+
+  # 3. Microservicio de Pedidos (Private Service)
+  - type: pserv
+    name: ms-pedidos
+    env: docker
+    dockerfilePath: ms-pedidos/Dockerfile
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: smartlogix-postgres, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: smartlogix-postgres, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: smartlogix-postgres, property: database }
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase: { name: smartlogix-postgres, property: user }
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase: { name: smartlogix-postgres, property: password }
+      - key: INVENTORY_HOSTPORT
+        fromService: { type: pserv, name: ms-inventario, property: hostport }
+      - key: INVENTORY_URL
+        value: http://${INVENTORY_HOSTPORT}
+
+  # 4. Microservicio de Envíos (Private Service)
+  - type: pserv
+    name: ms-envios
+    env: docker
+    dockerfilePath: ms-envios/Dockerfile
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: smartlogix-postgres, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: smartlogix-postgres, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: smartlogix-postgres, property: database }
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase: { name: smartlogix-postgres, property: user }
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase: { name: smartlogix-postgres, property: password }
+
+  # 5. API Gateway / BFF (web = Web Service, el ÚNICO accesible desde tu Vercel/Internet)
+  - type: web
+    name: bff-gateway
+    env: docker
+    dockerfilePath: bff-gateway/Dockerfile
+    envVars:
+      - key: JWT_SECRET
+        value: "defaultsecretkeyplaceholderformicros32chars"
+      - key: INVENTARIO_HOSTPORT
+        fromService: { type: pserv, name: ms-inventario, property: hostport }
+      - key: MS_INVENTARIO_URI
+        value: http://${INVENTARIO_HOSTPORT}
+      - key: PEDIDOS_HOSTPORT
+        fromService: { type: pserv, name: ms-pedidos, property: hostport }
+      - key: MS_PEDIDOS_URI
+        value: http://${PEDIDOS_HOSTPORT}
+      - key: ENVIOS_HOSTPORT
+        fromService: { type: pserv, name: ms-envios, property: hostport }
+      - key: MS_ENVIOS_URI
+        value: http://${ENVIOS_HOSTPORT}
