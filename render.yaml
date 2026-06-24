@@ -4,7 +4,7 @@ version: "1"
 databases:
   - name: smartlogix-postgres
     databaseName: smartlogix
-    user: postgres
+    user: smartuser
     plan: free
 
 services:
