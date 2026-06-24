@@ -20,7 +20,14 @@ public class SecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
             .csrf(ServerHttpSecurity.CsrfSpec::disable) // Deshabilitado para APIs REST/Microservicios
-            .cors(org.springframework.security.config.Customizer.withDefaults())
+            .cors(cors -> cors.configurationSource(exchange -> {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000", "https://smartlogix-front.vercel.app", "https://smart-logix-frontend.vercel.app"));
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true);
+                return config;
+            }))
             .authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/actuator/**", "/fallback/**").permitAll() // Rutas públicas locales
                 .anyExchange().permitAll() // Permitir paso libre para que el filtro JwtValidationFilter gestione las rutas
