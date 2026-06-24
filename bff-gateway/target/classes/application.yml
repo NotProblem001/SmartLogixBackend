@@ -20,6 +20,7 @@ spring:
               - "http://localhost:3000"
               - "http://localhost:5173"
               - "https://smartlogix-front.vercel.app"
+              - "https://smart-logix-frontend.vercel.app"
             allowedMethods:
               - GET
               - POST
