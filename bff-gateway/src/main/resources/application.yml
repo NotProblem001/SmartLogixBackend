@@ -71,6 +71,12 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 50s
       failureRateThreshold: 50
 
+# Ajuste crítico para el plan gratuito de Render (Cold Starts)
+resilience4j.timelimiter:
+  instances:
+    shippingCircuitBreaker:
+      timeoutDuration: 60s
+
 # RNF-O01: Observabilidad
 management:
   endpoints:
